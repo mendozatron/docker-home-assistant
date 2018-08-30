@@ -1,0 +1,67 @@
+version: '3'
+services:
+  postdb1:
+    container_name: postdb1
+    restart: unless-stopped
+    image: postgres:9.6
+    volumes:
+      - ${WORKDIR}/docker/postgresql:/var/lib/postgresql/data
+      - ~/etc/timezone:/etc/localtime:ro
+    environment:
+      - POSTGRES_USER='root'
+      - POSTGRES_PASSWORD='root'
+    ports:
+      - "5432:5432"
+  influxdb:
+    container_name: influxdb
+    restart: unless-stopped
+    image: influxdb
+    volumes:
+      - ${WORKDIR}/docker/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
+      - ${WORKDIR}/docker/influxdb/db:/var/lib/influxdb
+    environment:
+      - 'env.influxdb'
+    ports:
+      - "8086:8086"
+  mqtt:
+    container_name: MQTT
+    restart: unless-stopped
+    image: eclipse-mosquitto
+    volumes:
+      - ${WORKDIR}/docker/mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
+      - ${WORKDIR}/docker/mosquitto/log:/mosquitto/log
+      - ${WORKDIR}/docker/mosquitto/data:/mosquitto/data
+      - ~/etc/timezone:/etc/localtime:ro 
+    ports:
+      - "1883:1883"
+      - "9001:9001"
+  home-assistant:
+    #image: homeassistant/home-assistant:0.64.3
+    image: homeassistant/home-assistant:latest
+    container_name: "hass"
+    restart: always
+    depends_on:
+      - influxdb
+      - mqtt
+      - postdb1
+    healthcheck:
+      test: ["CMD", "curl", "-f", "https://REDACTED"]
+      interval: 30s
+      timeout: 10s
+      retries: 6
+    ports:
+      - "8123:8123"
+    volumes:
+      - ${WORKDIR}/docker/hass-config:/config
+      - ${WORKDIR}/docker/hass_media:/media
+    environment:
+      - TZ=America/LOS_ANGELES
+  dasher:
+    container_name: dasher
+    restart: unless-stopped
+    image: clemenstyp/dasher-docker:latest
+    depends_on:
+      - "mqtt"
+    volumes:
+      - ${WORKDIR}/docker/dasher:/root/dasher/config
+    network_mode: "host"
