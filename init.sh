@@ -12,7 +12,7 @@ mkdir -p $WORKDIR
 mkdir -p ${WORKDIR}/docker/
 mkdir -p ${WORKDIR}/docker/portainer/
 mkdir -p ${WORKDIR}/docker/syncthing/
-mkdir -p ${WORKDIR}/docker/dasher/
+mkdir -p ${WORKDIR}/docker/amazon-dash/
 mkdir -p ${WORKDIR}/docker/mosquitto/
 mkdir -p ${WORKDIR}/docker/mosquitto/config/
 mkdir -p ${WORKDIR}/docker/mosquitto/log/

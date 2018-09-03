@@ -24,17 +24,18 @@ services:
     ports:
       - "8086:8086"
   mqtt:
-    container_name: MQTT
-    restart: unless-stopped
-    image: eclipse-mosquitto
-    volumes:
-      - ${WORKDIR}/docker/mosquitto/config/mosquitto.conf:/mosquitto/config/mosquitto.conf
-      - ${WORKDIR}/docker/mosquitto/log:/mosquitto/log
-      - ${WORKDIR}/docker/mosquitto/data:/mosquitto/data
-      - ~/etc/timezone:/etc/localtime:ro 
+    image: eclipse-mosquitto:latest
+    container_name: "MQTT"
+    restart: always
     ports:
-      - "1883:1883"
-      - "9001:9001"
+      - 1883:1883
+      - 9001:9001
+    volumes:
+      - ${WORKDIR}/docker/mosquitto/data:/mosquitto/data
+      - ${WORKDIR}/docker/mosquitto/config:/mosquitto/config
+      - ${WORKDIR}/docker/mosquitto/mqtt/log:/mosquitto/log
+    environment:
+      - TZ=America/New_York
   home-assistant:
     #image: homeassistant/home-assistant:0.64.3
     image: homeassistant/home-assistant:latest
@@ -52,16 +53,24 @@ services:
     ports:
       - "8123:8123"
     volumes:
-      - ${WORKDIR}/docker/hass-config:/config
+      - ${WORKDIR}/docker/home-assistant-config:/config
       - ${WORKDIR}/docker/hass_media:/media
     environment:
       - TZ=America/LOS_ANGELES
-  dasher:
-    container_name: dasher
+  grafana:
+    container_name: grafana
     restart: unless-stopped
-    image: clemenstyp/dasher-docker:latest
+    image: grafana/grafana
+    user: "104"
     depends_on:
-      - "mqtt"
+      - "influxdb"
+    ports:
+      - "3000:3000"
+  amazon-dash:
+    image: nekmo/amazon-dash:latest
+    container_name: amazon-dash
+    restart: always
+    user: root
     volumes:
-      - ${WORKDIR}/docker/dasher:/root/dasher/config
+      - ${WORKDIR}/docker/amazon-dash/amazon-dash.yml:/config/amazon-dash.yml
     network_mode: "host"
