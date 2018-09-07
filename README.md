@@ -1,7 +1,7 @@
 # docker-home-assistant
 
 
-Home-Assistant + MySQL + Mosquitto docker containers
+Home-Assistant + Full Stack Docker Containers
 
 Create home-assistant/hass/conf/secrets.yaml latitude: 46.4639 longitude: 30.7386
 Install docker
@@ -12,6 +12,15 @@ Home Assistant Config Repo cd docker/ git clone
 https://github.com/mendozatron/home-assistant-config
 
 
+Rasbian install ( docker ce and docker ) 
+\\
+
+https://docs.docker.com/install/linux/docker-ce/debian/#install-using-the-convenience-script
+
+https://docs.docker.com/install/linux/docker-ce/debian/#install-docker-ce
+
+
+//
 Launch Docker Compose with:
 sh init.sh .
 
@@ -26,3 +35,5 @@ Launch shell then type influx
 - show database
 
 and type CREATE DATABASE "db_name"
+
+
