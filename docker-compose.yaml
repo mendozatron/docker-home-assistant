@@ -1,5 +1,15 @@
 version: '3'
 services:
+
+  portainer:
+    container_name: portainer
+    image: portainer/portainer
+    volumes:
+      - ${WORKDIR}/portainer:/data
+      - /var/run/docker.sock:/var/run/docker.sock
+    ports:
+      - "9000:9000"
+
   postdb1:
     container_name: postdb1
     restart: unless-stopped
@@ -25,6 +35,7 @@ services:
       - "8086:8086"
   mqtt:
     image: eclipse-mosquitto:latest
+    #ARM (RPI) image: fstehle/rpi-mosquitto
     container_name: "MQTT"
     restart: always
     ports:
