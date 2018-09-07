@@ -16,10 +16,10 @@ services:
     image: postgres:9.6
     volumes:
       - ${WORKDIR}/docker/postgresql:/var/lib/postgresql/data
-      - ~/etc/timezone:/etc/localtime:ro
     environment:
       - POSTGRES_USER='root'
       - POSTGRES_PASSWORD='root'
+      - TZ=America/LOS_ANGELES
     ports:
       - "5432:5432"
   influxdb:
@@ -34,8 +34,8 @@ services:
     ports:
       - "8086:8086"
   mqtt:
-    image: eclipse-mosquitto:latest
-    #ARM (RPI) image: fstehle/rpi-mosquitto
+    #image: eclipse-mosquitto:latest
+    image: fstehle/rpi-mosquitto
     container_name: "MQTT"
     restart: always
     ports:
@@ -49,7 +49,8 @@ services:
       - TZ=America/New_York
   home-assistant:
     #image: homeassistant/home-assistant:0.64.3
-    image: homeassistant/home-assistant:latest
+    #image: homeassistant/home-assistant:latest
+    image: lroguet/rpi-home-assistant 
     container_name: "hass"
     restart: always
     depends_on:
@@ -68,7 +69,7 @@ services:
       - ${WORKDIR}/docker/hass_media:/media
     environment:
       - TZ=America/LOS_ANGELES
-    network_mode: "bridge"
+    network_mode: "host"
   grafana:
     container_name: grafana
     restart: unless-stopped
