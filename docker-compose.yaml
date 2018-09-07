@@ -57,6 +57,7 @@ services:
       - ${WORKDIR}/docker/hass_media:/media
     environment:
       - TZ=America/LOS_ANGELES
+    network_mode: "bridge"
   grafana:
     container_name: grafana
     restart: unless-stopped
