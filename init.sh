@@ -26,6 +26,8 @@ mkdir -p ${WORKDIR}/docker/chronograf/
 mkdir -p ${WORKDIR}/docker/grafana/
 mkdir -p ${WORKDIR}/docker/speedtest/
 mkdir -p ${WORKDIR}/docker/node-red-1/
+mkdir -p ${WORKDIR}/rpi-motion/
+mkdir -p ${WORKDIR}/rpi-motion/videos/
 
 mkdir -p ${WORKDIR}/docker/appdaemon/
 mkdir -p ${WORKDIR}/docker/appdaemon/apps/
