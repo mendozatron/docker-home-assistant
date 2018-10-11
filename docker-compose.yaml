@@ -1,39 +1,14 @@
 version: '3'
 services:
-
-  portainer:
-    container_name: portainer
-    image: portainer/portainer
-    volumes:
-      - ${WORKDIR}/portainer:/data
-      - /var/run/docker.sock:/var/run/docker.sock
-    ports:
-      - "9000:9000"
-
-  postdb1:
-    container_name: postdb1
-    restart: unless-stopped
-    image: postgres:9.6
-    volumes:
-      - ${WORKDIR}/docker/postgresql:/var/lib/postgresql/data
-    environment:
-      - POSTGRES_USER='root'
-      - POSTGRES_PASSWORD='root'
-      - TZ=America/LOS_ANGELES
-    ports:
-      - "5432:5432"
-  influxdb:
-    container_name: influxdb
-    restart: unless-stopped
-    image: influxdb
-    volumes:
-      - ${WORKDIR}/docker/influxdb/influxdb.conf:/etc/influxdb/influxdb.conf:ro
-      - ${WORKDIR}/docker/influxdb/db:/var/lib/influxdb
-    environment:
-      - 'env.influxdb'
-    ports:
-      - "8086:8086"
-  mqtt:
+ # portainer:
+ #E   container_name: portainer
+ #   image: portainer/portainer
+ #   volumes:
+ #     - ${WORKDIR}/portainer:/data
+ #     - /var/run/docker.sock:/var/run/docker.sock
+ #   ports:
+ #     - "9000:9000"
+  mqtt:   
     #image: eclipse-mosquitto:latest
     image: fstehle/rpi-mosquitto
     container_name: "MQTT"
@@ -50,13 +25,12 @@ services:
   home-assistant:
     #image: homeassistant/home-assistant:0.64.3
     #image: homeassistant/home-assistant:latest
-    image: lroguet/rpi-home-assistant 
+    image: homeassistant/raspberrypi3-homeassistant 
+  #image: lroguet/rpi-home-assistant 
     container_name: "hass"
     restart: always
     depends_on:
-      - influxdb
       - mqtt
-      - postdb1
     healthcheck:
       test: ["CMD", "curl", "-f", "https://REDACTED"]
       interval: 30s
@@ -70,20 +44,23 @@ services:
     environment:
       - TZ=America/LOS_ANGELES
     network_mode: "host"
-  grafana:
-    container_name: grafana
-    restart: unless-stopped
-    image: grafana/grafana
-    user: "104"
-    depends_on:
-      - "influxdb"
-    ports:
-      - "3000:3000"
   amazon-dash:
-    image: nekmo/amazon-dash:latest
+    # image: clemenstyp/dasher-docker
+    image: nekmo/amazon-dash
     container_name: amazon-dash
     restart: always
     user: root
     volumes:
       - ${WORKDIR}/docker/amazon-dash/amazon-dash.yml:/config/amazon-dash.yml
     network_mode: "host"
+  motion:
+    container_name: "motion"
+    #image: motion:latest
+    image: lazyatom/rpi-motion
+    volumes:
+      - ${WORKDIR}/docker/rpi-motion/:/mnt/motion/
+    devices:
+      - /dev/video0:/dev/video0
+    ports:
+      - "8081:8081"
+    restart: always
