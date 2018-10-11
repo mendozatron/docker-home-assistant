@@ -37,3 +37,6 @@ Launch shell then type influx
 and type CREATE DATABASE "db_name"
 
 
+Referenced Repos:
+https://github.com/mendozatron/home-assistant-config <- Home Assistant Configuration Files.
+
