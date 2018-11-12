@@ -1,16 +1,23 @@
 # docker-home-assistant
 
 
-Home-Assistant + Full Stack Docker Containers
+Home-Assistant + Minimal Raspberry Pi Stack.
 
-Create home-assistant/hass/conf/secrets.yaml latitude: 46.4639 longitude: 30.7386
+- Motion
+- HomeAssistant
+- MQTT <-- Moved to Docker-Monitors
+See: https://github.com/mendozatron/docker-home-assistant-monitors
+
+Install:
+Create home-assistant/hass/conf/secrets.yaml 
 Install docker
 Install docker-compose
 Run init.sh
 
 Home Assistant Config Repo cd docker/ git clone 
-https://github.com/mendozatron/home-assistant-config
-
+path docker/
+git clone https://github.com/mendozatron/home-assistant-config
+Create secrets.yaml
 
 Rasbian install ( docker ce and docker ) 
 \\
@@ -27,16 +34,6 @@ sh init.sh .
 
 \\\
 
-influxdb: May need to manually create config file.
-Create database from command line:
-
-Launch shell then type influx
-
-- show database
-
-and type CREATE DATABASE "db_name"
-
 
 Referenced Repos:
 https://github.com/mendozatron/home-assistant-config <- Home Assistant Configuration Files.
-
