@@ -31,11 +31,6 @@ services:
     restart: always
     depends_on:
       - mqtt
-    healthcheck:
-      test: ["CMD", "curl", "-f", "https://REDACTED"]
-      interval: 30s
-      timeout: 10s
-      retries: 6
     ports:
       - "8123:8123"
     volumes:
@@ -58,7 +53,8 @@ services:
     #image: motion:latest
     image: lazyatom/rpi-motion
     volumes:
-      - ${WORKDIR}/docker/rpi-motion/:/mnt/motion/
+      - ${WORKDIR}/docker/motion/:/mnt/motion/
+      - ${WORKDIR}/docker/motion/config/:/etc/motion/
     devices:
       - /dev/video0:/dev/video0
     ports:
