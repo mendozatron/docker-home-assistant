@@ -65,3 +65,4 @@ xcuserdata/
 # videos ( motion ) #
 #####################
 docker/*/*.avi
+.env
